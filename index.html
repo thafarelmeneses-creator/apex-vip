@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX RECOVERY — Lista VIP</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060606;
+  --s1:#0e0e0e;
+  --s2:#151515;
+  --s3:#1c1c1c;
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.13);
+  --gold:#D4A853;
+  --gold2:#F0C870;
+  --gold-dim:rgba(212,168,83,0.1);
+  --green:#3DD68C;
+  --blue:#5B9CF6;
+  --red:#FF5A5A;
+  --text:#F5F2ED;
+  --text2:#8A8580;
+  --text3:#3A3530;
+  --r:14px;
+  --r-sm:9px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;font-size:14px;line-height:1.6;overflow-x:hidden}
+
+/* ── SCROLL ── */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 40px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(6,6,6,0.95),transparent);backdrop-filter:blur(12px)}
+.nav-logo{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;letter-spacing:4px;color:var(--gold)}
+.nav-sub{font-size:9px;letter-spacing:2.5px;color:var(--text3);text-transform:uppercase;margin-top:2px}
+.nav-cta{padding:9px 20px;border:1px solid var(--gold);border-radius:50px;font-size:12px;font-weight:700;color:var(--gold);text-decoration:none;letter-spacing:1px;transition:all .2s}
+.nav-cta:hover{background:var(--gold);color:#000}
+
+/* ── HERO ── */
+.hero{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80');background-size:cover;background-position:center top;filter:brightness(0.25) saturate(0.8)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(6,6,6,0.7) 0%,rgba(6,6,6,0.3) 50%,rgba(6,6,6,0.8) 100%)}
+.hero-overlay2{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--bg) 100%)}
+.hero-content{position:relative;text-align:center;padding:120px 20px 80px;max-width:900px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(212,168,83,0.1);border:1px solid rgba(212,168,83,0.25);border-radius:20px;padding:6px 18px;font-size:10px;font-weight:700;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:32px}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.hero-logo{font-family:'Rajdhani',sans-serif;font-size:clamp(72px,14vw,130px);font-weight:700;letter-spacing:10px;color:var(--gold);line-height:.9;margin-bottom:4px;text-shadow:0 0 80px rgba(212,168,83,0.3)}
+.hero-logo-sub{font-size:clamp(11px,1.5vw,15px);letter-spacing:6px;color:var(--text3);text-transform:uppercase;margin-bottom:28px;font-weight:400}
+.hero-title{font-size:clamp(24px,4vw,46px);font-weight:800;line-height:1.15;margin-bottom:18px;max-width:720px;margin-left:auto;margin-right:auto}
+.hero-title em{font-style:normal;color:var(--gold)}
+.hero-sub{font-size:clamp(14px,1.8vw,18px);color:var(--text2);max-width:540px;margin:0 auto 40px;line-height:1.8;font-weight:300}
+.hero-evento{display:inline-flex;align-items:center;gap:0;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden;margin-bottom:44px}
+.ev-item{display:flex;align-items:center;gap:8px;padding:14px 22px;font-size:12px;font-weight:600}
+.ev-sep{width:1px;height:40px;background:var(--border)}
+.ev-icon{font-size:16px}
+.hero-cta{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:#000;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:17px 40px;border-radius:50px;text-decoration:none;transition:all .2s;border:none;cursor:pointer}
+.hero-cta:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 16px 48px rgba(212,168,83,0.25)}
+.hero-vagas{margin-top:18px;font-size:11px;color:var(--text3);letter-spacing:.5px}
+.hero-vagas strong{color:var(--red)}
+.hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--text3);font-size:10px;letter-spacing:2px;text-transform:uppercase;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--gold),transparent)}
+
+/* ── SECTIONS ── */
+section{padding:100px 20px;max-width:1140px;margin:0 auto}
+.section-eyebrow{font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;font-weight:700;margin-bottom:14px;display:block}
+.section-title{font-family:'Rajdhani',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:700;letter-spacing:.5px;line-height:1.1;margin-bottom:16px}
+.section-sub{color:var(--text2);font-size:15px;max-width:520px;line-height:1.8;margin-bottom:52px;font-weight:300}
+.gold-bar{width:48px;height:2px;background:var(--gold);border-radius:1px;margin-bottom:48px}
+
+/* ── IMMERSIVE IMAGE SECTION ── */
+.immersive{position:relative;height:600px;overflow:hidden;margin:0}
+.immersive-img{width:100%;height:100%;object-fit:cover;filter:brightness(.35) saturate(.7)}
+.immersive-content{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px 20px}
+.immersive-quote{font-family:'Rajdhani',sans-serif;font-size:clamp(28px,5vw,56px);font-weight:700;letter-spacing:1px;max-width:800px;line-height:1.2}
+.immersive-quote em{color:var(--gold);font-style:normal}
+.immersive-author{font-size:12px;color:var(--text2);letter-spacing:2px;text-transform:uppercase;margin-top:20px}
+
+/* ── EXPERIENCE ── */
+.exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:60px}
+.exp-card{background:var(--s1);padding:40px 32px;transition:background .2s;position:relative;overflow:hidden}
+.exp-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .3s;transform-origin:left}
+.exp-card:hover{background:var(--s2)}
+.exp-card:hover::after{transform:scaleX(1)}
+.exp-num{font-family:'Rajdhani',sans-serif;font-size:52px;font-weight:700;color:var(--text3);line-height:1;margin-bottom:16px}
+.exp-icon{font-size:32px;margin-bottom:14px;display:block}
+.exp-name{font-size:17px;font-weight:700;margin-bottom:8px}
+.exp-desc{font-size:13px;color:var(--text2);line-height:1.7}
+.exp-time{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.5px}
+
+/* ── PHOTO STRIP ── */
+.photo-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:60px 0}
+.photo-strip-item{aspect-ratio:4/3;overflow:hidden;border-radius:var(--r-sm)}
+.photo-strip-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s;filter:brightness(.7) saturate(.8)}
+.photo-strip-item:hover img{transform:scale(1.05);filter:brightness(.85) saturate(1)}
+
+/* ── PLANOS ── */
+.planos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:20px}
+.plano-card{background:var(--s1);border:1px solid var(--border);border-radius:20px;padding:32px 26px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.plano-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--cor)}
+.plano-card:hover{transform:translateY(-4px);border-color:var(--cor);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.plano-card.selected{border-color:var(--cor);background:linear-gradient(135deg,rgba(var(--cor-rgb),.06),var(--s1));transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.plano-destaque{position:absolute;top:18px;right:18px;padding:4px 12px;border-radius:20px;font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;background:var(--cor);color:#000}
+.plano-icon{font-size:36px;margin-bottom:16px;display:block}
+.plano-nome{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;letter-spacing:1px;color:var(--cor);margin-bottom:8px}
+.plano-preco{font-family:'Rajdhani',sans-serif;font-size:48px;font-weight:700;line-height:1;margin-bottom:4px}
+.plano-preco span{font-size:18px;color:var(--text2)}
+.plano-periodo{font-size:11px;color:var(--text3);margin-bottom:20px}
+.plano-itens{list-style:none;margin-bottom:24px}
+.plano-itens li{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);padding:6px 0;border-bottom:1px solid var(--border)}
+.plano-itens li:last-child{border-bottom:none}
+.plano-check{font-weight:700;font-size:13px}
+.plano-btn{width:100%;padding:13px;border-radius:50px;border:1.5px solid var(--cor);background:transparent;color:var(--cor);font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.plano-card.selected .plano-btn,.plano-btn:hover{background:var(--cor);color:#000}
+
+/* ── FORM ── */
+.form-wrap{max-width:620px;margin:0 auto}
+.form-card{background:var(--s1);border:1px solid var(--border2);border-radius:24px;padding:44px;overflow:hidden;position:relative}
+.form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(--gold),transparent)}
+.form-header{text-align:center;margin-bottom:36px}
+.form-header-title{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;letter-spacing:1px;color:var(--gold);margin-bottom:6px}
+.form-header-sub{font-size:13px;color:var(--text2)}
+.form-plano-box{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-radius:var(--r-sm);margin-bottom:28px;border:1px solid;font-weight:600}
+.fg{margin-bottom:18px}
+.fl{font-size:10px;letter-spacing:1.5px;color:var(--text3);text-transform:uppercase;font-weight:700;display:block;margin-bottom:8px}
+.fi,.fs{width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:var(--r-sm);padding:13px 16px;color:var(--text);font-family:'Montserrat',sans-serif;font-size:14px;outline:none;transition:border-color .2s;appearance:none}
+.fi:focus,.fs:focus{border-color:var(--gold)}
+.fi::placeholder{color:var(--text3)}
+.fs{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23555' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pgto-tabs{display:flex;border:1px solid var(--border2);border-radius:var(--r-sm);overflow:hidden;margin-bottom:18px}
+.pgto-tab{flex:1;padding:12px;border:none;background:transparent;color:var(--text2);font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.pgto-tab.active{background:var(--gold);color:#000;font-weight:800}
+.pgto-panel{display:none}.pgto-panel.active{display:block}
+.pix-box{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-sm);padding:16px}
+.pix-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pix-key{font-size:13px;font-weight:700;color:var(--gold)}
+.copy-btn{padding:6px 14px;background:var(--gold-dim);border:1px solid rgba(212,168,83,.3);color:var(--gold);border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif;transition:background .15s;white-space:nowrap}
+.copy-btn:hover{background:rgba(212,168,83,.2)}
+.cartao-box{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-sm);padding:20px;text-align:center}
+.total-box{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:var(--gold-dim);border:1px solid rgba(212,168,83,.15);border-radius:var(--r-sm);margin-bottom:14px}
+.submit-btn{width:100%;padding:17px;background:var(--gold);color:#000;border:none;border-radius:50px;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:6px}
+.submit-btn:hover{background:var(--gold2);transform:translateY(-1px);box-shadow:0 10px 30px rgba(212,168,83,.25)}
+.submit-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.form-note{font-size:11px;color:var(--text3);text-align:center;margin-top:14px;line-height:1.6}
+.form-erro{background:rgba(255,90,90,.1);border:1px solid rgba(255,90,90,.3);color:var(--red);padding:11px 16px;border-radius:var(--r-sm);font-size:12px;font-weight:500;margin-bottom:12px;display:none}
+
+/* ── SUCESSO ── */
+.sucesso{display:none;text-align:center;padding:52px 20px;max-width:500px;margin:0 auto}
+.sucesso-icon{font-size:72px;margin-bottom:18px}
+.sucesso-title{font-family:'Rajdhani',sans-serif;font-size:38px;font-weight:700;color:var(--gold);letter-spacing:2px;margin-bottom:12px}
+.sucesso-sub{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:28px}
+.sucesso-card{background:var(--s1);border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin-bottom:28px;text-align:left}
+.sucesso-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.sucesso-row:last-child{border-bottom:none}
+.sucesso-row span:first-child{color:var(--text2)}
+.sucesso-row span:last-child{font-weight:700}
+.wpp-btn{display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#fff;padding:15px 32px;border-radius:50px;font-size:14px;font-weight:700;text-decoration:none;font-family:'Montserrat',sans-serif;transition:opacity .15s}
+.wpp-btn:hover{opacity:.9}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-radius:var(--r);overflow:hidden;margin:60px 0}
+.stat-card{background:var(--s1);padding:36px 28px;text-align:center}
+.stat-num{font-family:'Rajdhani',sans-serif;font-size:48px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:8px}
+.stat-label{font-size:12px;color:var(--text2);letter-spacing:.5px}
+
+/* ── LOADING ── */
+.loading{position:fixed;inset:0;background:rgba(6,6,6,.92);display:none;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:16px;backdrop-filter:blur(8px)}
+.loading.show{display:flex}
+.ld{width:8px;height:8px;border-radius:50%;background:var(--gold);display:inline-block;margin:0 4px;animation:ld 1.2s infinite}
+.ld:nth-child(2){animation-delay:.2s}.ld:nth-child(3){animation-delay:.4s}
+@keyframes ld{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+.ld-txt{font-size:13px;color:var(--text2);letter-spacing:2px}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:60px 20px;border-top:1px solid var(--border);background:var(--s1)}
+.footer-logo{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;letter-spacing:5px;color:var(--gold);margin-bottom:8px}
+.footer-tag{font-size:10px;color:var(--text3);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:20px}
+.footer-links{display:flex;gap:24px;justify-content:center;margin-bottom:20px}
+.footer-links a{font-size:12px;color:var(--text2);text-decoration:none;transition:color .15s}
+.footer-links a:hover{color:var(--gold)}
+.footer-copy{font-size:11px;color:var(--text3)}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  nav{padding:16px 20px}
+  .exp-grid{grid-template-columns:1fr}
+  .planos-grid{grid-template-columns:1fr}
+  .photo-strip{grid-template-columns:1fr 1fr}
+  .photo-strip-item:last-child{display:none}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .fr{grid-template-columns:1fr}
+  .form-card{padding:28px 20px}
+  .hero-evento{flex-direction:column;gap:0}
+  .ev-sep{width:100%;height:1px}
+}
+</style>
+</head>
+<body>
+
+<div class="loading" id="loading">
+  <div><span class="ld"></span><span class="ld"></span><span class="ld"></span></div>
+  <div class="ld-txt">Confirmando inscrição...</div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div>
+    <div class="nav-logo">APEX</div>
+    <div class="nav-sub">Recovery System</div>
+  </div>
+  <a href="#inscricao" class="nav-cta">Garantir Vaga</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-overlay2"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="hero-badge-dot"></span>Lista VIP — Vagas Limitadas</div>
+    <div class="hero-logo">APEX</div>
+    <div class="hero-logo-sub">Recovery System</div>
+    <h1 class="hero-title">Recuperação de elite às margens do <em>litoral cearense</em></h1>
+    <p class="hero-sub">Banho de gelo, bota pneumática e massoterapia profissional. O protocolo que separa quem treina de quem evolui — nas dunas de Camocim.</p>
+    <div class="hero-evento" id="hero-evento">
+      <div class="ev-item"><span class="ev-icon">📅</span> <span id="hero-data">Carregando...</span></div>
+      <div class="ev-sep"></div>
+      <div class="ev-item"><span class="ev-icon">📍</span> <span id="hero-local">—</span></div>
+      <div class="ev-sep"></div>
+      <div class="ev-item"><span class="ev-icon">⏰</span> <span id="hero-horario">—</span></div>
+    </div>
+    <a href="#inscricao" class="hero-cta">Garantir minha vaga <span>↓</span></a>
+    <div class="hero-vagas">⚡ Apenas <strong id="hero-vagas">—</strong> vagas disponíveis</div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div><span>scroll</span></div>
+</div>
+
+<!-- IMMERSIVE QUOTE -->
+<div class="immersive">
+  <img class="immersive-img" src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=1920&q=80" alt="Atleta em recuperação">
+  <div class="immersive-content">
+    <div class="immersive-quote">O campeão não é quem treina mais.<br/>É quem <em>recupera melhor.</em></div>
+    <div class="immersive-author">— APEX Recovery · Camocim, CE</div>
+  </div>
+</div>
+
+<!-- EXPERIÊNCIA -->
+<section>
+  <span class="section-eyebrow">O protocolo</span>
+  <h2 class="section-title">Três zonas.<br/>Uma transformação.</h2>
+  <p class="section-sub">Cada zona do protocolo APEX foi desenhada para maximizar sua recuperação e retorno à performance.</p>
+  <div class="gold-bar"></div>
+  <div class="exp-grid">
+    <div class="exp-card">
+      <div class="exp-num">01</div>
+      <span class="exp-icon">🧊</span>
+      <div class="exp-name">Banheira de Gelo</div>
+      <div class="exp-desc">Imersão em água gelada para redução de inflamação muscular, alívio de dores e ativação da resposta de recuperação do corpo.</div>
+      <div class="exp-time">⏱ 10 minutos</div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-num">02</div>
+      <span class="exp-icon">🦵</span>
+      <div class="exp-name">Bota Pneumática</div>
+      <div class="exp-desc">Compressão sequencial para drenagem linfática ativa, melhora da circulação e eliminação de toxinas musculares.</div>
+      <div class="exp-time">⏱ 10 minutos</div>
+    </div>
+    <div class="exp-card">
+      <div class="exp-num">03</div>
+      <span class="exp-icon">💆</span>
+      <div class="exp-name">Massoterapia</div>
+      <div class="exp-desc">Massagem profissional para soltura muscular profunda, alívio de tensões e recuperação completa pós-treino.</div>
+      <div class="exp-time">⏱ 13 minutos</div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO STRIP -->
+<div style="padding:0 20px;max-width:1140px;margin:0 auto 0">
+  <div class="photo-strip">
+    <div class="photo-strip-item">
+      <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80" alt="Atleta treinando">
+    </div>
+    <div class="photo-strip-item">
+      <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80" alt="Recuperação">
+    </div>
+    <div class="photo-strip-item">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80" alt="Praia Camocim">
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<section style="padding-top:40px;padding-bottom:40px">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Zonas de Recuperação</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">33</div>
+      <div class="stat-label">Minutos Premium</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">30</div>
+      <div class="stat-label">Vagas por Evento</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Supervisionado</div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANOS -->
+<section id="planos">
+  <span class="section-eyebrow">Planos</span>
+  <h2 class="section-title">Escolha sua experiência</h2>
+  <p class="section-sub">Três opções para cada atleta. Todos incluem protocolo de gelo profissional e supervisão especializada.</p>
+  <div class="gold-bar"></div>
+  <div class="planos-grid">
+
+    <div class="plano-card" id="card-Express" style="--cor:#3DD68C;--cor-rgb:61,214,140" onclick="selecionarPlano('Express')">
+      <span class="plano-icon">⚡</span>
+      <div class="plano-nome">Express</div>
+      <div class="plano-preco"><span>R$</span>29<span>,90</span></div>
+      <div class="plano-periodo">por sessão</div>
+      <ul class="plano-itens">
+        <li><span class="plano-check" style="color:#3DD68C">✓</span> Banheira de gelo (10 min)</li>
+        <li><span class="plano-check" style="color:#3DD68C">✓</span> Protocolo supervisionado</li>
+        <li><span class="plano-check" style="color:var(--text3)">—</span> <span style="opacity:.35">Bota pneumática</span></li>
+        <li><span class="plano-check" style="color:var(--text3)">—</span> <span style="opacity:.35">Massoterapia</span></li>
+      </ul>
+      <button class="plano-btn" style="--cor:#3DD68C" onclick="selecionarPlano('Express')">Selecionar Express</button>
+    </div>
+
+    <div class="plano-card" id="card-Performance" style="--cor:#5B9CF6;--cor-rgb:91,156,246" onclick="selecionarPlano('Performance')">
+      <span class="plano-destaque" style="background:#5B9CF6">Popular</span>
+      <span class="plano-icon">🚀</span>
+      <div class="plano-nome">Performance</div>
+      <div class="plano-preco"><span>R$</span>49<span>,90</span></div>
+      <div class="plano-periodo">por sessão</div>
+      <ul class="plano-itens">
+        <li><span class="plano-check" style="color:#5B9CF6">✓</span> Banheira de gelo (10 min)</li>
+        <li><span class="plano-check" style="color:#5B9CF6">✓</span> Protocolo supervisionado</li>
+        <li><span class="plano-check" style="color:#5B9CF6">✓</span> Bota <em>ou</em> Massagem</li>
+        <li><span class="plano-check" style="color:var(--text3)">—</span> <span style="opacity:.35">Protocolo completo</span></li>
+      </ul>
+      <button class="plano-btn" style="--cor:#5B9CF6" onclick="selecionarPlano('Performance')">Selecionar Performance</button>
+    </div>
+
+    <div class="plano-card" id="card-Premium" style="--cor:#D4A853;--cor-rgb:212,168,83" onclick="selecionarPlano('Premium')">
+      <span class="plano-destaque" style="background:#D4A853">Completo</span>
+      <span class="plano-icon">👑</span>
+      <div class="plano-nome">Premium</div>
+      <div class="plano-preco"><span>R$</span>89<span>,90</span></div>
+      <div class="plano-periodo">por sessão</div>
+      <ul class="plano-itens">
+        <li><span class="plano-check" style="color:#D4A853">✓</span> Banheira de gelo (10 min)</li>
+        <li><span class="plano-check" style="color:#D4A853">✓</span> Protocolo supervisionado</li>
+        <li><span class="plano-check" style="color:#D4A853">✓</span> Bota pneumática (10 min)</li>
+        <li><span class="plano-check" style="color:#D4A853">✓</span> Massoterapia completa (13 min)</li>
+      </ul>
+      <button class="plano-btn" style="--cor:#D4A853" onclick="selecionarPlano('Premium')">Selecionar Premium</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- FORMULÁRIO -->
+<section id="inscricao" style="padding-top:20px">
+  <div style="text-align:center;margin-bottom:52px">
+    <span class="section-eyebrow">Inscrição</span>
+    <h2 class="section-title">Garanta sua vaga agora</h2>
+    <div class="gold-bar" style="margin:0 auto 0"></div>
+  </div>
+
+  <div class="form-wrap">
+    <div class="form-card" id="form-section">
+      <div class="form-header">
+        <div style="font-size:40px;margin-bottom:12px">🏆</div>
+        <div class="form-header-title">Lista VIP APEX</div>
+        <div class="form-header-sub">Preencha seus dados e escolha a forma de pagamento</div>
+      </div>
+
+      <div id="plano-box" style="display:none" class="form-plano-box"></div>
+
+      <div class="fr">
+        <div class="fg"><label class="fl">Nome completo *</label><input type="text" class="fi" id="f-nome" placeholder="Seu nome"></div>
+        <div class="fg"><label class="fl">WhatsApp *</label><input type="tel" class="fi" id="f-tel" placeholder="(85) 99999-9999"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label class="fl">Instagram</label><input type="text" class="fi" id="f-insta" placeholder="@seuusuario"></div>
+        <div class="fg">
+          <label class="fl">Modalidade *</label>
+          <select class="fs" id="f-mod">
+            <option value="">Selecione...</option>
+            <option>Corrida</option><option>Beach Tennis</option><option>Surf</option>
+            <option>Crossfit</option><option>Ciclismo</option><option>Natação</option>
+            <option>Triathlon</option><option>Musculação</option><option>Outro</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg" id="evento-select-wrap" style="display:none">
+        <label class="fl">Evento *</label>
+        <select class="fs" id="f-evento" onchange="atualizarEvento()">
+          <option value="">Selecione o evento...</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="fl">Plano *</label>
+        <select class="fs" id="f-plano" onchange="atualizarPlano()">
+          <option value="">Selecione seu plano...</option>
+          <option value="Express">Express — R$ 29,90 (Banheira de gelo)</option>
+          <option value="Performance">Performance — R$ 49,90 (Gelo + Bota ou Massagem)</option>
+          <option value="Premium">Premium — R$ 89,90 (Gelo + Bota + Massagem)</option>
+        </select>
+      </div>
+
+      <div class="fg" style="margin-top:8px">
+        <label class="fl">Pagamento *</label>
+        <div class="pgto-tabs">
+          <button class="pgto-tab active" id="tab-pix" onclick="pgtoTab('pix')">💚 PIX</button>
+          <button class="pgto-tab" id="tab-cartao" onclick="pgtoTab('cartao')">💳 Cartão</button>
+        </div>
+        <div class="pgto-panel active" id="panel-pix">
+          <div class="pix-box">
+            <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Após confirmar, envie o comprovante pelo WhatsApp</div>
+            <div class="pix-row">
+              <div>
+                <div style="font-size:9px;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Chave PIX</div>
+                <!-- ⚠ SUBSTITUA pela sua chave PIX -->
+                <div class="pix-key" id="pix-key">(85) 99999-9999</div>
+              </div>
+              <button class="copy-btn" onclick="copiarPix()">Copiar</button>
+            </div>
+          </div>
+        </div>
+        <div class="pgto-panel" id="panel-cartao">
+          <div class="cartao-box">
+            <div style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.7">Pagamento seguro via <strong style="color:var(--text)">Mercado Pago</strong>.<br>Clique no botão abaixo para pagar.</div>
+            <a id="cartao-link" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#5B9CF6;color:#fff;padding:11px 24px;border-radius:50px;font-size:13px;font-weight:700;text-decoration:none;font-family:'Montserrat',sans-serif">💳 Pagar com Cartão</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-erro" id="form-erro"></div>
+
+      <div id="total-box" style="display:none" class="total-box">
+        <span style="font-size:12px;color:var(--text2)" id="total-label">—</span>
+        <span style="font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;color:var(--gold)" id="total-valor">—</span>
+      </div>
+
+      <button class="submit-btn" onclick="enviar()">Confirmar Inscrição ✓</button>
+      <div class="form-note">🔒 Dados usados exclusivamente para confirmação de presença.<br>Você receberá confirmação pelo WhatsApp.</div>
+    </div>
+
+    <!-- SUCESSO -->
+    <div class="sucesso" id="sucesso">
+      <div class="sucesso-icon">🎉</div>
+      <div class="sucesso-title">INSCRITO!</div>
+      <div class="sucesso-sub">Sua vaga está reservada. Envie o comprovante pelo WhatsApp para confirmar o pagamento e garantir seu lugar.</div>
+      <div class="sucesso-card" id="sucesso-card"></div>
+      <a id="wpp-link" class="wpp-btn" target="_blank">📲 Enviar comprovante pelo WhatsApp</a>
+      <div style="margin-top:20px;font-size:11px;color:var(--text3);letter-spacing:1px">RECUPERE · RECARREGUE · SUPERE</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">APEX</div>
+  <div class="footer-tag" id="footer-local">Recovery System — Camocim, CE</div>
+  <div class="footer-links">
+    <a href="#planos">Planos</a>
+    <a href="#inscricao">Inscrição</a>
+  </div>
+  <div class="footer-copy">© 2026 APEX Recovery. Todos os direitos reservados.</div>
+</footer>
+
+<script>
+// ══ CONFIG — APENAS ESTAS URLS SÃO FIXAS ══
+// PIX e WhatsApp são configurados no dashboard → Config VIP
+const FB_URL    = 'https://apex-recovery-default-rtdb.firebaseio.com/inscricoes_vip.json';
+const FB_CONFIG = 'https://apex-recovery-default-rtdb.firebaseio.com/config_vip.json';
+let PIX_KEY  = '—';
+let WHATSAPP = '5585999999999';
+const LINKS_CARTAO = {
+  Express:     'https://mpago.li/1VQiH7M',
+  Performance: 'https://mpago.li/15moK7e',
+  Premium:     'https://mpago.li/2Dt9JXb',
+};
+const PRECOS = { Express: 29.90, Performance: 49.90, Premium: 89.90 };
+const CORES  = { Express: '#3DD68C', Performance: '#5B9CF6', Premium: '#D4A853' };
+const ICONS  = { Express: '⚡', Performance: '🚀', Premium: '👑' };
+
+
+let pgtoAtual   = 'pix';
+let planoAtual  = '';
+let eventoAtual = null;
+let configVIP   = null;
+let todosEventos = [];
+
+// ══ CARREGA CONFIG DO FIREBASE ══
+async function carregarConfig() {
+  try {
+    const r = await fetch(FB_CONFIG);
+    const d = await r.json();
+    if (!d) return;
+    configVIP = d;
+
+    // Atualiza chave PIX e WhatsApp do Firebase
+    if (d.pix) {
+      PIX_KEY = d.pix;
+      document.getElementById('pix-key').textContent = d.pix;
+    }
+    if (d.wpp) {
+      WHATSAPP = d.wpp;
+    }
+    if (d.precos) {
+      if (d.precos.Express)     PRECOS.Express     = d.precos.Express;
+      if (d.precos.Performance) PRECOS.Performance = d.precos.Performance;
+      if (d.precos.Premium)     PRECOS.Premium     = d.precos.Premium;
+      // Atualiza opções do select de plano
+      const sel = document.getElementById('f-plano');
+      sel.innerHTML =
+        '<option value="">Selecione seu plano...</option>' +
+        '<option value="Express">Express — R$ ' + PRECOS.Express.toFixed(2).replace('.',',') + ' (Banheira de gelo)</option>' +
+        '<option value="Performance">Performance — R$ ' + PRECOS.Performance.toFixed(2).replace('.',',') + ' (Gelo + Bota ou Massagem)</option>' +
+        '<option value="Premium">Premium — R$ ' + PRECOS.Premium.toFixed(2).replace('.',',') + ' (Gelo + Bota + Massagem)</option>';
+    }
+
+    // Eventos abertos
+    todosEventos = (d.eventos || []).filter(ev => ev.aberto && vagasRestantes(ev) > 0);
+
+    if (todosEventos.length === 0) {
+      // Nenhum evento aberto
+      document.getElementById('hero-data').textContent    = 'Em breve';
+      document.getElementById('hero-local').textContent   = 'Camocim — CE';
+      document.getElementById('hero-horario').textContent = '—';
+      document.getElementById('hero-vagas').textContent   = '0';
+      return;
+    }
+
+    if (todosEventos.length === 1) {
+      // Evento único — exibe direto no hero
+      const ev = todosEventos[0];
+      eventoAtual = ev;
+      exibirEventoHero(ev);
+    } else {
+      // Múltiplos eventos — mostra select
+      const wrap = document.getElementById('evento-select-wrap');
+      wrap.style.display = 'block';
+      const sel = document.getElementById('f-evento');
+      sel.innerHTML = '<option value="">Selecione o evento...</option>' +
+        todosEventos.map((ev, i) =>
+          '<option value="' + i + '">' + ev.nome + ' · ' + ev.data + ' · ' + ev.local + '</option>'
+        ).join('');
+      // Hero mostra o primeiro como padrão
+      exibirEventoHero(todosEventos[0]);
+    }
+
+  } catch(e) {
+    // Fallback: mantém dados hardcoded se Firebase falhar
+    console.log('Config offline');
+  }
+}
+
+function vagasRestantes(ev) {
+  return Math.max(0, (ev.vagas || 0) - (ev.vagasUsadas || 0));
+}
+
+function exibirEventoHero(ev) {
+  document.getElementById('hero-data').textContent    = ev.data    || '—';
+  document.getElementById('hero-local').textContent   = ev.local   || '—';
+  document.getElementById('hero-horario').textContent = ev.horario || '—';
+  document.getElementById('hero-vagas').textContent   = vagasRestantes(ev);
+}
+
+function atualizarEvento() {
+  const idx = document.getElementById('f-evento').value;
+  if (idx === '') { eventoAtual = null; return; }
+  eventoAtual = todosEventos[+idx];
+  exibirEventoHero(eventoAtual);
+}
+
+// Carrega ao abrir a página
+carregarConfig();
+
+let pgtoAtual = pgtoAtual || 'pix';
+let planoAtual = planoAtual || '';
+
+function selecionarPlano(p) {
+  planoAtual = p;
+  ['Express','Performance','Premium'].forEach(x => {
+    document.getElementById('card-'+x)?.classList.toggle('selected', x === p);
+  });
+  document.getElementById('f-plano').value = p;
+  atualizarPlano();
+  setTimeout(() => document.getElementById('inscricao').scrollIntoView({ behavior: 'smooth' }), 100);
+}
+
+function atualizarPlano() {
+  const p = document.getElementById('f-plano').value;
+  if (!p) { document.getElementById('plano-box').style.display='none'; document.getElementById('total-box').style.display='none'; return; }
+  planoAtual = p;
+  const cor = CORES[p]; const val = PRECOS[p];
+  const box = document.getElementById('plano-box');
+  box.style.display = 'flex';
+  box.style.borderColor = cor;
+  box.style.background = 'rgba(0,0,0,0)';
+  box.innerHTML = '<span style="font-size:20px;margin-right:10px">' + ICONS[p] + '</span><span style="font-weight:700;color:' + cor + ';flex:1">' + p + '</span><span style="font-family:\'Rajdhani\',sans-serif;font-size:24px;font-weight:700;color:' + cor + '">R$ ' + val.toFixed(2).replace('.',',') + '</span>';
+  document.getElementById('total-box').style.display = 'flex';
+  document.getElementById('total-label').textContent = p + ' — ' + (p==='Express'?'Banheira':p==='Performance'?'Gelo + Bota ou Massa':'Gelo + Bota + Massa');
+  document.getElementById('total-valor').textContent = 'R$ ' + val.toFixed(2).replace('.',',');
+  const cl = document.getElementById('cartao-link');
+  if (cl) { cl.href = LINKS_CARTAO[p] || '#'; cl.textContent = '💳 Pagar ' + p + ' — R$ ' + val.toFixed(2).replace('.',','); }
+  ['Express','Performance','Premium'].forEach(x => document.getElementById('card-'+x)?.classList.toggle('selected', x === p));
+}
+
+function pgtoTab(tab) {
+  pgtoAtual = tab;
+  ['pix','cartao'].forEach(t => {
+    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+    document.getElementById('panel-'+t).classList.toggle('active', t===tab);
+  });
+}
+
+function copiarPix() {
+  navigator.clipboard.writeText(PIX_KEY).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    const orig = btn.textContent;
+    btn.textContent = 'Copiado ✓';
+    btn.style.color = 'var(--green)';
+    setTimeout(() => { btn.textContent = orig; btn.style.color = ''; }, 2000);
+  }).catch(() => prompt('Copie a chave PIX:', PIX_KEY));
+}
+
+async function enviar() {
+  const nome  = document.getElementById('f-nome').value.trim();
+  const tel   = document.getElementById('f-tel').value.trim();
+  const insta = document.getElementById('f-insta').value.trim();
+  const mod   = document.getElementById('f-mod').value;
+  const plano = document.getElementById('f-plano').value;
+  const erro  = document.getElementById('form-erro');
+  erro.style.display = 'none';
+  if (!nome)  return mostrarErro('Informe seu nome completo.');
+  if (!tel)   return mostrarErro('Informe seu WhatsApp.');
+  if (!mod)   return mostrarErro('Selecione sua modalidade.');
+  if (!plano) return mostrarErro('Selecione um plano.');
+  document.getElementById('loading').classList.add('show');
+  const insc = { nome, tel, insta, modalidade: mod, plano, valor: PRECOS[plano], pagamento: pgtoAtual==='pix'?'PIX':'Cartão', status: 'Pendente', data: new Date().toISOString() };
+  try {
+    const r = await fetch(FB_URL);
+    const lista = (await r.json()) || [];
+    lista.push(insc);
+    await fetch(FB_URL, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(lista) });
+  } catch(e) {
+    try { const b = JSON.parse(localStorage.getItem('apex_vip')||'[]'); b.push(insc); localStorage.setItem('apex_vip', JSON.stringify(b)); } catch{}
+  }
+  document.getElementById('loading').classList.remove('show');
+  mostrarSucesso(insc);
+}
+
+function mostrarErro(msg) {
+  const el = document.getElementById('form-erro');
+  el.textContent = '⚠ ' + msg;
+  el.style.display = 'block';
+  el.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+function mostrarSucesso(insc) {
+  document.getElementById('form-section').style.display = 'none';
+  const rows = [['Nome',insc.nome],['Plano',ICONS[insc.plano]+' '+insc.plano],['Valor','R$ '+insc.valor.toFixed(2).replace('.',',')],['Pagamento',insc.pagamento],['Modalidade',insc.modalidade],['Evento', (eventoAtual ? eventoAtual.nome + ' · ' + eventoAtual.data : '—')]];
+  document.getElementById('sucesso-card').innerHTML = rows.map(([k,v]) => '<div class="sucesso-row"><span>'+k+'</span><span>'+v+'</span></div>').join('');
+  const msg = encodeURIComponent('🏆 *APEX RECOVERY — Confirmação VIP*\n\nNome: '+insc.nome+'\nPlano: '+insc.plano+' (R$ '+insc.valor.toFixed(2).replace('.',',')+') \nPagamento: '+insc.pagamento+'\nModalidade: '+insc.modalidade+'\n\nSegue o comprovante 👇');
+  document.getElementById('wpp-link').href = 'https://wa.me/'+WHATSAPP+'?text='+msg;
+  document.getElementById('sucesso').style.display = 'block';
+  document.getElementById('inscricao').scrollIntoView({ behavior:'smooth' });
+}
+</script>
+</body>
+</html>
